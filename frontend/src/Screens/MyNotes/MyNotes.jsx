@@ -1,13 +1,28 @@
+import { useEffect } from "react";
 import { Badge, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainScreen from "../../Components/MainScreen";
-import notes from "../../notes";
+import axios from "axios";
+import { useState } from "react";
 
 const MyNotes = () => {
+  const [notes, setNotes] = useState([]);
+
+  const fetchNotes = async () => {
+    const { data } = await axios.get("/api/notes");
+    console.log(data);
+    setNotes(data);
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
   const deleteHandler = (id) => {
     if (window.confirm("Are you Sure?")) {
     }
   };
+
   return (
     <>
       <MainScreen title="Welcome Back Shahid Ansari">
@@ -17,7 +32,7 @@ const MyNotes = () => {
           </Button>
         </Link>
         {notes.map((note) => (
-          <Card>
+          <Card style={{ margin: 10 }} key={note._id}>
             <Card.Header style={{ display: "flex" }}>
               <span
                 style={{
